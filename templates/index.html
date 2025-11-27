@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <h2>Innovate with Google Cloud</h2>
+    <p>Join us for a day of insightful talks and networking.</p>
+</section>
+
+<section class="search-section">
+    <input type="text" id="searchInput" placeholder="Search by title or speaker...">
+    <select id="categorySelect">
+        <option value="">All Categories</option>
+        <option value="Keynote">Keynote</option>
+        <option value="Infrastructure">Infrastructure</option>
+        <option value="Data">Data</option>
+        <option value="Serverless">Serverless</option>
+        <option value="AI/ML">AI/ML</option>
+        <option value="Security">Security</option>
+        <option value="Hybrid Cloud">Hybrid Cloud</option>
+    </select>
+</section>
+
+<section class="schedule">
+    <h3>Event Schedule</h3>
+    <div class="timeline" id="scheduleList">
+        {% for talk in talks %}
+        <div class="talk-card" data-title="{{ talk.title }}" data-speakers="{{ talk.speakers | map(attribute='first_name') | join(' ') }} {{ talk.speakers | map(attribute='last_name') | join(' ') }}" data-category="{{ talk.category | join(' ') }}">
+            <div class="time-slot">
+                <span class="time">{{ talk.time }}</span>
+            </div>
+            <div class="talk-details">
+                <div class="talk-header">
+                    <h4 class="talk-title">{{ talk.title }}</h4>
+                    {% if not talk.is_break %}
+                    <div class="categories">
+                        {% for cat in talk.category %}
+                        <span class="badge">{{ cat }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <p class="talk-description">{{ talk.description }}</p>
+                {% if talk.speakers %}
+                <div class="speakers">
+                    <p><strong>Speakers:</strong></p>
+                    <ul>
+                        {% for speaker in talk.speakers %}
+                        <li>
+                            <a href="{{ speaker.linkedin_url }}" target="_blank">{{ speaker.first_name }} {{ speaker.last_name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
